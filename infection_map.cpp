@@ -1,7 +1,4 @@
-#include "epidemy.hpp"
-
-#include <iostream>
-#include <map>
+#include "infection_map.hpp"
 
 void InfectionMap::AddConnection(size_t u, size_t v)
 {
@@ -87,76 +84,4 @@ std::pair<size_t, size_t> InfectionMap::DFS(size_t v, std::vector<Status> &statu
     }
 
     return {infected, at_risk};
-}
-
-class RenumberingInfectionMapBuilder
-{
-public:
-    void AddEdge(size_t u, size_t v)
-    {
-        edges_.push_back(std::make_pair(Convert(u), Convert(v)));
-    }
-
-    InfectionMap Get()
-    {
-        auto infection_map = InfectionMap(counter_);
-        for (auto [u, v] : edges_)
-        {
-            infection_map.AddConnection(u, v);
-            infection_map.AddConnection(v, u);
-        }
-        return infection_map;
-    }
-
-    std::vector<size_t> GetReverseConverter()
-    {
-        return reverse_converter_;
-    }
-
-private:
-    size_t Convert(size_t v)
-    {
-        if (!converter_.contains(v))
-        {
-            converter_[v] = counter_;
-            reverse_converter_.push_back(v);
-            return counter_++;
-        }
-
-        return converter_[v];
-    }
-
-    size_t counter_ = 0;
-    std::map<size_t, size_t> converter_;
-    std::vector<size_t> reverse_converter_;
-    std::vector<std::pair<size_t, size_t>> edges_;
-};
-
-int main()
-{
-    int M;
-    std::cin >> M;
-    size_t u, v;
-
-    auto builder = RenumberingInfectionMapBuilder();
-
-    for (int i = 0; i < M; ++i)
-    {
-        std::cin >> u >> v;
-        builder.AddEdge(u, v);
-    }
-
-
-    auto infection_map = builder.Get();
-    auto reverse_converter = builder.GetReverseConverter();
-
-
-    auto result = infection_map.InfectAll();
-
-    std::cout << result.size();
-
-    for (auto v : result)
-    {
-        std::cout << reverse_converter[v] << ' ';
-    }
 }
