@@ -1,0 +1,1 @@
+g++ -std=c++20 infection_map.cpp main.cpp -o main

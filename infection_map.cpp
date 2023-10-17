@@ -34,6 +34,7 @@ std::vector<size_t> InfectionMap::InfectAll()
         }
 
         initial_cities.push_back(best_v);
+        city_status_[best_v] = Status::kInfected;
         DFS(best_v, city_status_);
         infected_count += best_infected;
     }

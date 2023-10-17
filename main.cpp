@@ -94,6 +94,7 @@ int main()
 
     for (auto v : result)
     {
-        std::cout << reverse_converter[v] << ' ';
+        std::cout << reverse_converter[v] << " ";
     }
+    std::cout << '\n';
 }
